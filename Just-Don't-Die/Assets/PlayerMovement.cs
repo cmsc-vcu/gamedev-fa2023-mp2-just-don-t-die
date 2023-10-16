@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private float baseMoveSpeed = 7f;
     [SerializeField] private float baseJumpForce = 14f;
+    private float powerLevel = 0;
     private float moveSpeed;
     private float jumpForce;
    
@@ -113,8 +114,8 @@ public class PlayerMovement : MonoBehaviour
             return;
 
         isDashing = true;
-        moveSpeed = dashSpeed;
-        jumpForce = dashJumpForce;
+        moveSpeed += powerLevel;
+        jumpForce += (powerLevel/ 3);
         canDash = false;  // Dash is on cooldown
 
         // Reset dash after the dash duration
@@ -130,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         moveSpeed = baseMoveSpeed; 
         jumpForce = baseJumpForce;
+        powerLevel = 0;
     }
 
     private IEnumerator ResetDashCooldown()
@@ -162,6 +164,8 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Call the TakeDamage method on the boss script to deal damage
                     bossScript.TakeDamage(10);
+                     powerLevel+= 5;
+                   Debug.Log("Power Level: " + powerLevel);
                 }
                 else
                 {
