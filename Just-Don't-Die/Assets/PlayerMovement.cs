@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
         moveSpeed = baseMoveSpeed; 
         jumpForce = baseJumpForce;
         projectile = GetComponent<GameObject>();
+        gameObject.tag = "Player";
     }
 
     void Update()
