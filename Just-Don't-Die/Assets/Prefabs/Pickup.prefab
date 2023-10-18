@@ -172,4 +172,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  pokedex: {fileID: 11400000, guid: 3195c382df6381240a372cf89c04d427, type: 2}
+  pickupList: {fileID: 11400000, guid: 221625ac1245f8049ab0e99fd0266830, type: 2}
+  player: {fileID: 0}

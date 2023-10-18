@@ -2,33 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Pokedex", menuName = "Pokedex")]
-public class Pokedex : ScriptableObject
+[CreateAssetMenu(fileName="PickupList", menuName = "PickupList")]
+public class PickupList : ScriptableObject
 {
-    public List<GameObject> pokedex;
+    public List<GameObject> pickupList;
     private void Awake()
     {
-        List<GameObject> pokedex = new List<GameObject>();
+        List<GameObject> pickupList = new List<GameObject>();
     }
 
     private void OnEnable()
     {
-        pokedex.Clear();
+        pickupList.Clear();
     }
 
     public int Count()
     {
-        return pokedex.Count;
+        return pickupList.Count;
     }
 
     public void Add(GameObject gameObject)
     {
-        pokedex.Add(gameObject);
+        pickupList.Add(gameObject);
     }
 
     public GameObject GetLast() //test method- seeing if i can return from the scriptableobject
     {
-        return pokedex[pokedex.Count - 1];
+        return pickupList[pickupList.Count - 1];
     }
 
     
