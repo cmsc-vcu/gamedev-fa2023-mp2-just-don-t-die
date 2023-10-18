@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     bool player1_attacking;
     bool player2_attacking;
     private bool canAttack = true;  // Track if the player can attack
+    public int attackPower = 10;
 
     private bool isAttacking; // Added to track attack animation
     private bool isBlocking = false;
@@ -44,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform object1;
     public Transform object2;
+    public GameObject projectile;
     [SerializeField]  public float detectionRange = 10.0f;
     private bool isDashing = false;
     [SerializeField]  private float dashDuration = 1f;
@@ -64,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
         lastPlayerAttackTime = 0;
         moveSpeed = baseMoveSpeed; 
         jumpForce = baseJumpForce;
+        projectile = GetComponent<GameObject>();
     }
 
     void Update()
@@ -74,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         CheckObjectsInRange();
         UpdateAnimationState();
         HandleDashing();
-
+        
         //  UpdateAnimationState();
     }
 
@@ -115,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
         isDashing = true;
         moveSpeed += powerLevel;
-        jumpForce += (powerLevel/ 3);
+        //jumpForce += (powerLevel/3);
         canDash = false;  // Dash is on cooldown
 
         // Reset dash after the dash duration
@@ -163,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
                 if (bossScript != null)
                 {
                     // Call the TakeDamage method on the boss script to deal damage
-                    bossScript.TakeDamage(10);
+                    bossScript.TakeDamage(attackPower);
                      powerLevel+= 5;
                    Debug.Log("Power Level: " + powerLevel);
                 }

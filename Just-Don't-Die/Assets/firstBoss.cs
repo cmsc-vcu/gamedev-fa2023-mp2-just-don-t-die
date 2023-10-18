@@ -12,6 +12,8 @@ public class firstBoss : MonoBehaviour
     private bool playerWasInRange; // Track if player was previously in range
     private bool playerInRange; // Track if player is in range
     public float moveSpeed = 2.0f;
+    public int attackPower = 10;
+
 
     public Transform object1; // Reference to the player
     public Transform object2;
@@ -76,8 +78,9 @@ public class firstBoss : MonoBehaviour
         else
         {
 
-            if (Vector3.Distance(startPosition, object2.position) > 2) { 
-            rb.velocity = new Vector2(1 * moveSpeed, rb.velocity.y);
+            if (Vector3.Distance(startPosition, object2.position) > 2)
+            {
+                rb.velocity = new Vector2(1 * moveSpeed, rb.velocity.y);
             }
         }
     }
@@ -85,10 +88,10 @@ public class firstBoss : MonoBehaviour
 
     // Everytime the Player enters the Boss's attack range it will attack them after a breif delay (player must weave in-out of attacks)
     private void StartAttackSequence()
-    {  
+    {
         Debug.Log("starting sequence");
         StartCoroutine(AttackSequence());
-      
+
     }
 
     private void moveToPlayer()
@@ -106,7 +109,7 @@ public class firstBoss : MonoBehaviour
         rb.velocity = new Vector2(-1 * moveSpeed, rb.velocity.y);
     }
 
-   
+
 
     // Incorporate a way to remove terrain during battle
     private IEnumerator AttackSequence()
@@ -139,7 +142,7 @@ public class firstBoss : MonoBehaviour
         PlayerMovement playerScript = object1.GetComponent<PlayerMovement>();
         if (playerScript != null)
         {
-            playerScript.TakeDamage(10);
+            playerScript.TakeDamage(attackPower);
         }
         else
         {
