@@ -1,9 +1,12 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class Projectile : MonoBehaviour
 {
     public float speed = 10f; // Speed of the projectile
-    public float lifespan = 5f; // Time before the projectile is destroyed
+    public float lifespan = 2f; // Time before the projectile is destroyed
+    public int damage = 10;
+
 
     private Rigidbody2D rb2D;
 
@@ -24,9 +27,23 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
+        // Check if the collided object is the boss
+        firstBoss boss = collision.gameObject.GetComponent<firstBoss>();
+        if (boss != null)
+        {
+            // Inflict damage to the boss
+            boss.TakeDamage(damage);
+        }
+
         // Destroy the projectile on collision
         Destroy(gameObject);
     }
+
+
+
+
+
+
 }

@@ -5,19 +5,52 @@ public class ProjectileLauncher : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform launchPoint;
     public float launchForce = 100f;
+    public GameObjectSwitcher gameObjectSwitcher;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (gameObjectSwitcher == null)
         {
-            LaunchProjectile();
+            Debug.LogError("GameObjectSwitcher reference not set in the inspector.");
+            return;
+        }
+
+        GameObject activeObject = gameObjectSwitcher.GetActiveObject();
+        if (activeObject == null)
+        {
+            Debug.LogWarning("No active object found.");
+            return;
+        }
+
+        if (activeObject == gameObjectSwitcher.gameObject1)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                LaunchProjectile();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Cannot shoot projectiles. Active object is not gameObject1.");
         }
     }
+
+
+
+
+
 
     void LaunchProjectile()
     {
         // Instantiate the projectile at the launch point
         GameObject projectile = Instantiate(projectilePrefab, launchPoint.position, launchPoint.rotation);
+
+        // Check if the projectile is null (e.g., if instantiation failed)
+        if (projectile == null)
+        {
+            Debug.LogError("Failed to instantiate the projectile.");
+            return;
+        }
 
         // Get the Rigidbody2D component of the projectile
         Rigidbody2D projectileRigidbody = projectile.GetComponent<Rigidbody2D>();
@@ -31,9 +64,9 @@ public class ProjectileLauncher : MonoBehaviour
         else
         {
             Debug.LogError("Rigidbody2D not found in the projectile prefab.");
-            // If Rigidbody2D is missing, you may want to handle this case accordingly.
-            // For example, you could destroy the projectile immediately.
+            // Destroy the projectile if Rigidbody2D is missing
             Destroy(projectile);
         }
     }
+
 }
