@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -73,11 +74,14 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleMovementInput();
         HandleJumping();
-        HandleAttack();
-        CheckObjectsInRange();
-        UpdateAnimationState();
-        HandleDashing();
-        
+        if (SceneManager.GetActiveScene().name == "Battle")
+        {
+            HandleAttack();
+            CheckObjectsInRange();
+            UpdateAnimationState();
+            HandleDashing();
+        }
+
         //  UpdateAnimationState();
     }
 
