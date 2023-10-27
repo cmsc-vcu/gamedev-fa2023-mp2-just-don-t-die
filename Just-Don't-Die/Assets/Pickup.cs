@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pickup : MonoBehaviour
 {
     public Rigidbody2D rb;
     public PickupList pickupList;
-    public GameObject player;
+    public Image img;
 
     void Start()
     {
@@ -23,5 +24,8 @@ public class Pickup : MonoBehaviour
     {
         pickupList.Add(gameObject);
         Destroy(gameObject);
+        var temp = img.color;
+        temp.a = 1;
+        img.color = temp;
     }
 }
