@@ -8,4 +8,4 @@ All scripts are in C#. Assets are from:
 * https://assetstore.unity.com/packages/2d/characters/simple-2d-platformer-assets-pack-188518
 * https://assetstore.unity.com/packages/2d/characters/bolt-2d-jellyfarm-assets-pack-188722
 
-Clone this repo and open the folder in Unity to view, and play online at: 
+Clone this repo and open the folder in Unity to view, and play online at: https://play.unity.com/mg/other/project2-5-1
