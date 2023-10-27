@@ -50,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform object1;
     public Transform object2;
+    public Transform flag;
+
     public GameObject projectile;
     [SerializeField]  public float detectionRange = 10.0f;
     private bool isDashing = false;
@@ -78,6 +80,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        // Check if both objects are not null
+        if (object1 != null && flag != null)
+        {
+            // Calculate the distance between the objects
+            float distance = Vector3.Distance(object1.position, flag.position);
+
+            // Check if the distance is within the detection range
+            if (distance <= detectionRange)
+            {
+                SceneManager.LoadScene("Win");
+            }
+        }
         if (!dead)
         {
             hpText.text = "HP: " + currentHealth;
@@ -254,7 +269,8 @@ private IEnumerator ResetAttack()
 
     private void Die()
     {
-        Debug.Log("Player defeated!");  SceneManager.LoadScene("Lose");
+        Debug.Log("Player defeated!");  
+        SceneManager.LoadScene("Lose");
 
        dead = true;
       
