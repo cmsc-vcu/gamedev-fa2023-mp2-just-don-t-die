@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GroundMovement : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class GroundMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         change = new Vector2(horizontalMovement, 0);
         interval = 0;
+        if (!move)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
     }
 
     void Update()
@@ -29,12 +34,9 @@ public class GroundMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //rb.MovePosition(rb.position + change * speed * Time.fixedDeltaTime);
-        
-        
         if (move)
         {
-            if (counter < 20)
+            if (counter < 40)
             {
                 rb.MovePosition(rb.position + change * speed * Time.fixedDeltaTime);
                 counter++;
@@ -43,7 +45,7 @@ public class GroundMovement : MonoBehaviour
             {
                 rb.MovePosition(rb.position - change * speed * Time.fixedDeltaTime);
                 counter++;
-                if (counter == 40)
+                if (counter == 80)
                 {
                     counter = 0;
                 }
@@ -57,6 +59,7 @@ public class GroundMovement : MonoBehaviour
         if (kill)
         {
             Destroy(collision.gameObject);
+            SceneManager.LoadScene("Exploration");
         }
     }
 
