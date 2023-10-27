@@ -4,7 +4,7 @@ public class ProjectileLauncher : MonoBehaviour
 {
     public GameObject projectilePrefab;
     public Transform launchPoint;
-    public float launchForce = 100f;
+    public float launchForce = 1f;
     public GameObjectSwitcher gameObjectSwitcher;
 
     void Update()
@@ -22,7 +22,7 @@ public class ProjectileLauncher : MonoBehaviour
             return;
         }
 
-        if (activeObject == gameObjectSwitcher.gameObject1)
+        if (activeObject == gameObjectSwitcher.gameObject1 || activeObject == gameObjectSwitcher.gameObject2 || activeObject == gameObjectSwitcher.gameObject3)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
