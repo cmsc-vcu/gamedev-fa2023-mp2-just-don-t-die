@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class firstBoss : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class firstBoss : MonoBehaviour
     private bool playerInRange; // Track if player is in range
     public float moveSpeed = 2.0f;
     public int attackPower = 10;
+    private Animator anim;
+
 
 
     public Transform object1; // Reference to the player
@@ -21,9 +24,13 @@ public class firstBoss : MonoBehaviour
 
     private Vector3 startPosition;
     public GameObjectSwitcher gameObjectSwitcher;
+    private bool isRunning;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        anim.SetTrigger("idle");
         currentHealth = maxHealth;
         lastAttackTime = 0; // Initialize to allow immediate attack
         playerInRange = false; // Initialize player in range to false
@@ -48,6 +55,8 @@ public class firstBoss : MonoBehaviour
     void Update()
     {
 
+        UpdateAnimationState();
+       
         if (gameObjectSwitcher != null)
         {
             GameObject activeGameObject = gameObjectSwitcher.GetActiveObject();
@@ -73,16 +82,25 @@ public class firstBoss : MonoBehaviour
 
         if (IsPlayerInRange())
         {
+           
             moveToPlayer();
         }
+
         else
         {
 
             if (Vector3.Distance(startPosition, object2.position) > 2)
             {
+               
                 rb.velocity = new Vector2(1 * moveSpeed, rb.velocity.y);
+              isRunning = true;
+
+
             }
-        }
+
+
+
+        } 
     }
 
 
@@ -91,12 +109,13 @@ public class firstBoss : MonoBehaviour
     {
         Debug.Log("starting sequence");
         StartCoroutine(AttackSequence());
-
+       
     }
 
     private void moveToPlayer()
     {
-
+        isRunning = true;
+    
         if (currentHealth < 80)
         {
             moveSpeed = 3;
@@ -106,7 +125,9 @@ public class firstBoss : MonoBehaviour
         {
             moveSpeed = 4;
         }
+       
         rb.velocity = new Vector2(-1 * moveSpeed, rb.velocity.y);
+       
     }
 
 
@@ -165,6 +186,11 @@ public class firstBoss : MonoBehaviour
             {
                 // Debug.Log("Objects are within range! Distance: " + distance);
             }
+            if (distance >= attackRange)
+            {
+               
+                // Debug.Log("Objects are within range! Distance: " + distance);
+            }
         }
     }
 
@@ -195,6 +221,27 @@ public class firstBoss : MonoBehaviour
         {
             Debug.Log("Boss took " + damage + " damage. Current health: " + currentHealth);
         }
+    }
+
+    private void UpdateAnimationState()
+    {
+       // anim.SetTrigger("idle");
+
+        float distance = Vector3.Distance(object1.position, object2.position);
+
+
+        if (distance <= attackRange)
+        {
+            // state = MovementState.running;
+            //sprite.flipX = false;
+
+           anim.SetTrigger("run");
+        }
+        else
+        {
+            anim.SetTrigger("idle");
+        }
+
     }
     void Die()
     {

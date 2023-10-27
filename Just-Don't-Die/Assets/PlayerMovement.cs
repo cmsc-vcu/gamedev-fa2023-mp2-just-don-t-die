@@ -57,8 +57,20 @@ public class PlayerMovement : MonoBehaviour
 
     private bool canDash = true;
 
+
+    public Camera mainCamera;
+    public float zoomSpeed = 1.0f;
+    public float targetFOV = 30.0f; // The desired field of view
+
+    private float currentFOV;
+
+    
+
+
+
     void Start()
     {
+        currentFOV = mainCamera.fieldOfView;
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<BoxCollider2D>();
@@ -73,6 +85,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Interpolate between the current FOV and the target FOV to create a smooth zoom effect.
+        currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime * zoomSpeed);
+
+        // Set the camera's field of view to the current FOV.
+        mainCamera.fieldOfView = currentFOV;
         HandleMovementInput();
         HandleJumping();
         if (SceneManager.GetActiveScene().name == "Battle")
@@ -83,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
             HandleDashing();
         }
 
-        //  UpdateAnimationState();
+          UpdateAnimationState();
     }
 
 
@@ -91,6 +108,7 @@ public class PlayerMovement : MonoBehaviour
     {
         dirX = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
+       //
     }
 
     private void HandleJumping()
@@ -172,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Call the TakeDamage method on the boss script to deal damage
                     bossScript.TakeDamage(attackPower);
+                    anim.SetTrigger("hit");
                      powerLevel+= 5;
                    Debug.Log("Power Level: " + powerLevel);
                 }
@@ -256,21 +275,31 @@ private IEnumerator ResetAttack()
         {
             // state = MovementState.running;
             sprite.flipX = false;
+
+            anim.SetTrigger("run");
         }
         else if (dirX < 0f)
         {
             //state = MovementState.running;
+            anim.SetTrigger("run");
+
             sprite.flipX = true;
         }
         else
         {
+            anim.SetTrigger("idle");
+
             //  state = MovementState.idle;
         }
 
         if (rb.velocity.y > .1f)
         {
             //  state = MovementState.jumping;
+            anim.SetTrigger("jump");
+
+
         }
+
         else if (rb.velocity.y < -.1f)
         {
             // state = MovementState.falling;
