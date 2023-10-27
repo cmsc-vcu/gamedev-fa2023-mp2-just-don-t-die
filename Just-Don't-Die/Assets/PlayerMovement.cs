@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     public AudioSource audio;
     public AudioSource audio2;
+ 
+    [SerializeField] private Text hpText;
+    [SerializeField] private Text dashText;
 
     // Enumeration Variable for the different animations
     private enum MovementState { idle, running, jumping, falling, attack1 }
@@ -56,21 +60,10 @@ public class PlayerMovement : MonoBehaviour
 
 
     private bool canDash = true;
-
-
-    public Camera mainCamera;
-    public float zoomSpeed = 1.0f;
-    public float targetFOV = 30.0f; // The desired field of view
-
-    private float currentFOV;
-
-    
-
-
+    private bool dead;
 
     void Start()
     {
-        currentFOV = mainCamera.fieldOfView;
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<BoxCollider2D>();
@@ -85,22 +78,23 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Interpolate between the current FOV and the target FOV to create a smooth zoom effect.
-        currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime * zoomSpeed);
-
-        // Set the camera's field of view to the current FOV.
-        mainCamera.fieldOfView = currentFOV;
-        HandleMovementInput();
-        HandleJumping();
-        if (SceneManager.GetActiveScene().name == "Battle")
+        if (!dead)
         {
-            HandleAttack();
-            CheckObjectsInRange();
-            UpdateAnimationState();
-            HandleDashing();
-        }
+            hpText.text = "HP: " + currentHealth;
+            dashText.text = "Dash PWR: " + powerLevel;
 
-          UpdateAnimationState();
+            HandleMovementInput();
+            HandleJumping();
+            if (SceneManager.GetActiveScene().name == "Battle")
+            {
+                HandleAttack();
+                CheckObjectsInRange();
+                UpdateAnimationState();
+                HandleDashing();
+            }
+
+            UpdateAnimationState();
+        }
     }
 
 
@@ -191,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
                     // Call the TakeDamage method on the boss script to deal damage
                     bossScript.TakeDamage(attackPower);
                     anim.SetTrigger("hit");
-                     powerLevel+= 5;
+                     powerLevel+= 7;
                    Debug.Log("Power Level: " + powerLevel);
                 }
                 else
@@ -260,8 +254,10 @@ private IEnumerator ResetAttack()
 
     private void Die()
     {
-        Debug.Log("Player defeated!");
-        Destroy(gameObject); // Destroy the player object
+        Debug.Log("Player defeated!");  SceneManager.LoadScene("Lose");
+
+       dead = true;
+      
         // Implement actions for player defeat (e.g., game over, respawn, etc.)
     }
 
